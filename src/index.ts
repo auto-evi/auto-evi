@@ -1,46 +1,39 @@
+import { Application, Router } from "express";
 import fs from "node:fs";
 import path from "node:path";
 
-export const autoEvi = () => {
-     const controllerDir = path.resolve("src/module");
-     const outputPath = path.resolve("src/controllers.evi.ts");
-     const exportStatements: string[] = [];
+export const autoConnect = (app: Application) => {
+  const moduleDir = path.resolve("src/module");
 
-     if (!fs.existsSync(controllerDir)) {
-          console.warn(`⚠️ Base directory not found: ${controllerDir}`);
-          return;
-     }
-
-     const folders = fs.readdirSync(controllerDir);
-     for (const folder of folders) {
-          const folderPath = path.join(controllerDir, folder);
-          if (!fs.statSync(folderPath).isDirectory()) continue;
-
-          const files = fs.readdirSync(folderPath).filter(
-               (f) => f.endsWith(".controller.ts") || f.endsWith(".controller.js")
-          );
-
-          for (const file of files) {
-               const importPath = `./${path
-                    .relative(path.dirname(outputPath), path.join(controllerDir, folder, file))
-                    .replace(/\\/g, "/")
-                    .replace(/\.(ts|js)$/, "")}`;
-
-               const varName = `${folder}_${file
-                    .replace(/\.(controller\.ts|controller\.js)$/, "")
-                    .replace(/[-.]/g, "_")}`;
-
-               exportStatements.push(`export * as ${varName} from "${importPath}";`);
-          }
-     }
-
-     const newContent = exportStatements.join("\n");
-     const oldContent = fs.existsSync(outputPath) ? fs.readFileSync(outputPath, "utf-8") : "";
-
-     if (newContent.trim() !== oldContent.trim()) {
-          fs.writeFileSync(outputPath, newContent, "utf-8");
-          console.log(`✅ Controllers index updated at: ${outputPath}`);
-     } else {
-          console.log("✅ Controllers index already up to date.");
-     }
+  if (!fs.existsSync(moduleDir)) {
+    return;
+  }
+  loadRoutes(app, moduleDir);
 };
+
+const loadRoutes = (app: any, dir: string) => {
+    const folders = fs.readdirSync(dir);
+
+    for (const folder of folders) {
+      const folderPath = path.join(dir, folder);
+      const stat = fs.statSync(folderPath);
+
+      if (stat.isDirectory()) {
+        loadRoutes(app, folderPath);
+      } else if (folder.endsWith(".route.ts") || folder.endsWith(".route.js")) {
+        try {
+          const routeModule = require(path.join(dir, folder));
+          const router: Router = routeModule.default;
+
+          if (router && router instanceof Router) {
+            const routeName = "/" + path.basename(folder, path.extname(folder)).replace(".route", "");
+            app.use(routeName, router);
+          } else {
+               return
+          }
+        } catch (err) {
+          console.error(`❌ Failed to load route ${folder}:`, err);
+        }
+      }
+    }
+  };
