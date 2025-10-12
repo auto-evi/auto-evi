@@ -3,7 +3,7 @@ import path from "node:path";
 
 export const autoEvi = () => {
      const controllerDir = path.resolve("src/module");
-     const outputPath = path.resolve("src/controllers-auto.ts"); // ✅ داخل src
+     const outputPath = path.resolve("src/controllers.evi.ts");
      const exportStatements: string[] = [];
 
      if (!fs.existsSync(controllerDir)) {
