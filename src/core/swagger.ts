@@ -9,7 +9,7 @@ export const swagger_evi = (api_path: string) => {
      const resolvedBaseDir = candidateBaseDirs.find((p) => fs.existsSync(p)) || "src/module";
 
      const baseDir = path.resolve(resolvedBaseDir);
-     const outputPath = path.resolve("src/swagger.evi.ts");
+     const outputPath = path.resolve("src/swagger.auto-evi.ts");
 
      if (!fs.existsSync(baseDir)) {
           return;
