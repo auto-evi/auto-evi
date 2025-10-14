@@ -9,12 +9,6 @@
     ],
     "types": [
       "node",
-      "express",
-      "vitest/globals"
     ]
   },
-  "include": [
-    "src",
-    "vitest.config.ts"
-  ]
 }
