@@ -1,6 +1,6 @@
 {
   "name": "auto-evi",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -17,12 +17,12 @@
     "backend"
   ],
   "author": "elrefai99 <elrefai99@gmail.com>",
-  "homepage": "https://github.com/NoRisk-NoFun/auto-evi#readme",
+  "homepage": "https://github.com/auto-evi/auto-evi#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/NoRisk-NoFun/auto-evi.git"
+    "url": "git+https://github.com/auto-evi/auto-evi.git"
   },
-  "bugs": "https://github.com/NoRisk-NoFun/auto-evi/issues",
+  "bugs": "https://github.com/auto-evi/auto-evi/issues",
   "license": "MIT",
   "packageManager": "pnpm@10.6.5",
   "devDependencies": {
